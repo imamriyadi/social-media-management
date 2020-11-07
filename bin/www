@@ -21,7 +21,7 @@ app.set('port', port);
  * Create HTTP server.
  */
 
-var server = http.createServer(app); 
+var server = http.createServer(app);
 const io = socketIO(server);
 
 
@@ -45,7 +45,7 @@ io.on('connection', function(socket) {
   client.on('authenticated', (session) => {
     socket.emit('authenticated', 'Whatsapp is authenticated!');
     socket.emit('message', 'Whatsapp is authenticated!');
-    console.log('AUTHENTICATED', session); 
+    console.log('AUTHENTICATED', session);
   });
 
   client.on('auth_failure', function(session) {
@@ -53,11 +53,15 @@ io.on('connection', function(socket) {
   });
 
   client.on('disconnected', (reason) => {
-    socket.emit('message', 'Whatsapp is disconnected!'); 
+    socket.emit('message', 'Whatsapp is disconnected!');
   });
 });
 
-client.initialize();
+client.initialize().then((success)=>{
+  console.log('Wa Success : ', success);
+}).catch((error) => {
+  console.log('Wa Error : ', error);
+});
 /**
  * Listen on provided port, on all network interfaces.
  */
