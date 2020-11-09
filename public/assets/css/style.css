@@ -1,0 +1,22 @@
+.list-user{
+    width: 195px;
+    position: relative;
+    padding: 4px 8px;
+    padding-left: 4px;
+    background-color: rgb(255, 255, 255);
+    border: 1px solid rgb(235, 237, 239);
+    border-radius: 4px;
+    user-select: none;
+}
+.navbar-vertical.navbar-expand-xs .navbar-nav > .nav-item > .nav-link.active {
+    background: #222D84 !important;
+}
+.bg-primary{
+    background: #222D84 !important;
+}
+
+
+.btn-primary{
+    background: #222D84 !important;
+}
+ 
