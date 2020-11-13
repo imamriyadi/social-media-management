@@ -9,4 +9,9 @@ router.get("/",(req, res, next) =>{
     });
 });
 
+router.post("/auth",(req,res) =>{  
+    const {email,password} = req.body;  
+    res.send('respond with a resource:'+email+"psw:"+password);
+});
+
 module.exports = router;
