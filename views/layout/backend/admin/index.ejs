@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="Dashboard Dream Circle">
+    <meta name="author" content="Dream Circle Tech">
+    <base href="http://localhost:3000/">
+    <title>Dream Circle - Dashboard</title>
+    <!-- Load Script Tag Link css -->
+    <%- include('link'); -%>
+</head>
+
+<body class="bg-white">
+<%- include('sidenav'); -%>
+<!-- Main content -->
+<div class="main-content" id="panel">
+    <!-- Topnav -->
+    <%- include('topnav'); -%>
+    <!-- Page content -->
+    <%- include(pages); -%>
+</div>
+
+<!--load modal-->
+<%- include('modal') -%>
+<!-- Load Core Scripts -->
+<%- include('script'); -%>
+</body>
+</html>

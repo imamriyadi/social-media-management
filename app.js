@@ -1,6 +1,7 @@
-// @ts-nocheck
 const createError = require('http-errors');
 const express = require('express');
+const session = require('express-session');
+const flash = require("connect-flash");
 const socketIo = require("socket.io");
 const path = require('path');
 const cookieParser = require('cookie-parser');
@@ -20,7 +21,16 @@ app.set('view engine', 'ejs');
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser()); 
+app.use(cookieParser());
+app.use(flash());
+app.use(session({
+  secret: 'session-social-management',
+  resave :false,
+  saveUninitialized: true,
+  cookie : {
+    maxAge:(1000 * 60 * 100)
+  }
+}))
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/login', loginRouter);

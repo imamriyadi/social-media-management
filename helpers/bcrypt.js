@@ -10,4 +10,4 @@ const decrypt = (password,hash) =>{
     return bcrypt.compareSync(password, hash)
 }
 
-module.exports = {encrypt,decrypt}
+module.exports = {decrypt,encrypt}

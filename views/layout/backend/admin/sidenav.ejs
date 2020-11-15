@@ -3,7 +3,7 @@
     <div class="scrollbar-inner">
         <!-- Brand -->
         <div class="sidenav-header  align-items-center">
-            <a class="navbar-brand" style="background: #fff" href="javascript:void(0)">
+            <a class="navbar-brand" style="background: #fff" href="/">
                 <img src="assets/img/brand/logo.png" class="navbar-brand-img" alt="...">
                 <!-- <h2 style="margin-left: 0;text-align: left;"><div style="font-weight: bold;">Dream</div> Circle</h2> -->
             </a>
@@ -13,25 +13,20 @@
             <div class="collapse navbar-collapse" id="sidenav-collapse-main">
                 <ul class="navbar-nav">
                     <li class="dropdown dropdown" aria-haspopup="true" class="" aria-expanded="true">
-                        <a href="#" class="btn dropdown-toggle btn-primary" style="margin: 0 8px;width: calc(100% - 16px);">
-                            <i class="fa fa-plus text-white"></i> Add Project
+                        <a href="" class="btn dropdown-toggle btn-primary"
+                           style="margin: 0 8px;width: calc(100% - 16px);">
+                            <i class="fa fa-plus text-white"></i> New
                         </a>
-                        <ul class="dropdown-menu" id="select-project" style="margin: 0 8px;width: calc(100% - 16px); position: absolute">
-                            <li class="text-left">
-                                <a href="#" class="dropdown-item">
-                                    <i class="fa fa-whatsapp text-primary"></i>WhatsApp
-                                </a>
-                            </li>
-                            <li class="text-left">
-                                <a href="#" class="dropdown-item">
-                                    <i class="fa fa-telegram text-primary"></i>Telegram
-                                </a>
-                            </li>
-                            <li class="text-left">
-                                <a href="#" class="dropdown-item">
-                                    <i class="fab fa-facebook-messenger text-primary"></i>Facebook
-                                </a>
-                            </li>
+                        <ul class="dropdown-menu" id="select-project"
+                            style="margin: 0 8px;width: calc(100% - 16px); position: absolute">
+                            <% media.forEach(function (m) { %>
+                                <li class="text-left project" data-project_id="<%= m.id %>"
+                                    data-project_name="<%= m.name %>">
+                                    <a href="#" class="dropdown-item">
+                                        <i class="<%= m.icon %> text-primary"></i><%= m.name %>
+                                    </a>
+                                </li>
+                            <% }); %>
                         </ul>
                     </li>
                 </ul>
@@ -40,27 +35,15 @@
                     <span class="docs-normal">Main Project</span>
                 </h6>
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="/project/whatsapp/app-bot-abc">
-                            <i class="fab fa-whatsapp text-white"></i>
-                            <span class="nav-link-text">App Bot (Pt Abc)</span>
-                            <hr class="my-2">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/project/facebook-messages/app-bot-abc">
-                            <i class="fab fa-facebook-messenger text-primary"></i>
-                            <span class="nav-link-text">App Bot (Pt Abc)</span>
-                            <hr class="my-2">
-                        </a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/project/telegram/app-bot-abc">
-                            <i class="fab fa-telegram text-primary"></i>
-                            <span class="nav-link-text">App Bot (Pt Abc)</span>
-                            <hr class="my-2">
-                        </a>
-                    </li>
+                    <% project.forEach(function (p) { %>
+                        <li class="nav-item">
+                            <a class="nav-link <%= p.slug === project_detail.slug ? " active":"" %>" href="/project/<%= p.slug %>">
+                                <i class="<%= p.medium.icon %> <%= p.slug === project_detail.slug ? " text-white":" text-primary" %>"></i>
+                                <span class="nav-link-text"><%= p.name %></span>
+                                <hr class="my-2">
+                            </a>
+                        </li>
+                    <% }) %>
                 </ul>
                 <br>
                 <h6 class="navbar-heading p-0 text-muted">

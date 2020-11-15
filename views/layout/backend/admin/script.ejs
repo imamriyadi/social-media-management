@@ -1,0 +1,76 @@
+<script src="assets/vendor/jquery/dist/jquery.min.js"></script>
+<script src="assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="assets/vendor/js-cookie/js.cookie.js"></script>
+<script src="assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
+<script src="assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.3.1/socket.io.min.js"
+        integrity="sha512-/WwtKR6NnHomLo0O4w9QKc1INTPEJs7ko6u2aBTA1paPldhPl8LtXsi7a35iEZ69+9P5dcgVNESG8hrP4Y2t3w=="
+        crossorigin="anonymous"></script>
+<!-- Optional JS -->
+<script src="assets/vendor/chart.js/dist/Chart.min.js"></script>
+<script src="assets/vendor/chart.js/dist/Chart.extension.js"></script>
+<!-- Argon JS -->
+<script src="assets/js/argon.js?v=1.2.0"></script>
+
+<script>
+    $(document).ready(function () {
+        console.log()
+        var socket = io.connect('http://localhost:3000', {path: '/socket.io'});
+
+        socket.on('message', function (msg) {
+            console.log(msg);
+            // $('.logs').append($('<li>').text(msg));
+        });
+
+        socket.on('qr', function (src) {
+            console.log(src);
+            // $('#qrcode').attr('src', src);
+        });
+
+        socket.on('ready', function (data) {
+            console.log(data);
+            // $('#qrcode').hide();
+        });
+
+        socket.on('authenticated', function (data) {
+            console.log(data);
+            // $('#qrcode').hide();
+        });
+
+        $(".dropdown-toggle").click(function (e) {
+            e.preventDefault();
+            $("#select-project").hasClass("show") ? $("#select-project").removeClass("show") : $("#select-project").addClass("show");
+        });
+
+        $(".project").click(function (e) {
+            const projectId = $(this).data("project_id");
+            const projectName = $(this).data("project_name");
+            $("#modal-add-project").modal('show');
+            $("#modal-add-project h5.modal-title").html("New " + projectName + " Project");
+            $("input[name='media_id']").val(projectId);
+            $("input[name='user_id']").val(<%= user.id %>);
+        });
+
+        $("#btn-add-project").click(function () {
+            const data = {
+                name: $("input[name='name']").val(),
+                user_id: $("input[name='user_id']").val(),
+                media_id: $("input[name='media_id']").val()
+            }
+            console.log(data);
+            $.ajax({
+                url: "/project/new",
+                method: "post",
+                headers: {token:`<%= token %>`},
+                data: data,
+                success: function (success) {
+                    $("#modal-add-project").modal('hide');
+                    $("input[name='name']").val("");
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>

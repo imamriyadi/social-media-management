@@ -1,12 +1,10 @@
-var express = require('express');
-var router = express.Router();
-
+const express = require('express');
+const router = express.Router();
+const authentication = require('../middlewares/authentication');
+const UserController = require("../controller/UserController");
+const AdminController = require("../controller/AdminController");
 /* GET home page. */
-router.get('/', function (req, res, next) {
-    res.render('layout', {
-        title: 'Dashboard',
-        pages: "pages/dashboard"
-    });
-});
+router.get('/',authentication,AdminController.dashboard);
+router.get("/logout",UserController.logout);
 
 module.exports = router;
