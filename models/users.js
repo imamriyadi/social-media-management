@@ -57,12 +57,12 @@ module.exports = (sequelize, DataTypes) => {
         }
       }
     },
-    frist_name:  {
+    first_name:  {
       type:DataTypes.STRING,
       allowNull: false,
       validate: {
         notNull: {
-          msg: 'Please enter your frist name'
+          msg: 'Please enter your first name'
         }
       }
     }
