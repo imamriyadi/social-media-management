@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      users.hasMany(models.Task, { foreignKey: 'user_id', targetKey: 'id' }) 
+      // users.hasMany(models.Task, { foreignKey: 'user_id', targetKey: 'id' })
     }
   };
   users.init({
@@ -23,7 +23,7 @@ module.exports = (sequelize, DataTypes) => {
         unique: {
           args: true,
           msg: 'Email already registered'
-        }, 
+        },
         isEmail: {
           args: true,
           msg: 'checks for email format'
@@ -46,6 +46,7 @@ module.exports = (sequelize, DataTypes) => {
           args: [3],
           msg: 'Password length must be at least 3 characters'
         }
+      }
     },
     last_name:  {
       type:DataTypes.STRING,
@@ -74,5 +75,9 @@ module.exports = (sequelize, DataTypes) => {
     sequelize,
     modelName: 'users',
   });
+
+  users.associate = (models) =>{
+    users.belongsTo(models.users,{foreignKey:'id'});
+  }
   return users;
 };
