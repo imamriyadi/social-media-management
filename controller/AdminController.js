@@ -9,6 +9,7 @@ class AdminController {
                   model:media
               }]
           });
+          console.log(req.auth);
           res.render('layout/backend/admin', {
               slug:"",
               title: 'Dashboard',

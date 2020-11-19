@@ -4,12 +4,12 @@
  * Module dependencies.
  */
 const { Client } = require('whatsapp-web.js');
-const client = new Client();
 const qrcode = require('qrcode');
 const socketIO = require('socket.io');
-var app = require('../app');
+var app = require('../app'); 
 var debug = require('debug')('wa-management:server');
 var http = require('http');
+const fs = require('fs');
 /**
  * Get port from environment and store in Express.
  */
@@ -24,9 +24,33 @@ app.set('port', port);
 var server = http.createServer(app);
 const io = socketIO(server);
 
+const SESSION_FILE_PATH = "./bin/whatsapp-session.json";
+let sessionCfg;
+if (fs.existsSync(SESSION_FILE_PATH)) {
+  sessionCfg = require("./whatsapp-session.json");
+}
+
+const client = new Client({
+  restartOnAuthFail: true,
+  puppeteer: {
+    headless: true,
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-dev-shm-usage',
+      '--disable-accelerated-2d-canvas',
+      '--no-first-run',
+      '--no-zygote',
+      '--single-process', // <- this one doesn't works in Windows
+      '--disable-gpu'
+    ],
+  },
+  session: sessionCfg,
+  restartOnAuthFail: true
+});
 
 // Socket IO
-io.on('connection', function(socket) {
+io.on('connection', function (socket) {
   socket.emit('message', 'Connecting...');
 
   client.on('qr', (qr) => {
@@ -42,26 +66,98 @@ io.on('connection', function(socket) {
     socket.emit('message', 'Whatsapp is ready!');
   });
 
+
   client.on('authenticated', (session) => {
     socket.emit('authenticated', 'Whatsapp is authenticated!');
     socket.emit('message', 'Whatsapp is authenticated!');
     console.log('AUTHENTICATED', session);
+    sessionCfg = session;
+    fs.writeFile("./whatsapp-session.json", JSON.stringify(session), function (err) {
+      if (err) {
+        console.error(err);
+      }
+    });
   });
 
-  client.on('auth_failure', function(session) {
+  client.on('auth_failure', function (session) {
     socket.emit('message', 'Auth failure, restarting...');
   });
 
   client.on('disconnected', (reason) => {
     socket.emit('message', 'Whatsapp is disconnected!');
+    fs.unlinkSync(SESSION_FILE_PATH, function (err) {
+      if (err) return console.log(err);
+      console.log('Session file deleted!');
+    });
+    client.destroy();
+    client.initialize();
+  });
+
+  client.on('message', msg => {
+    socket.emit('message', msg);
+  });
+
+  client.on('message_create', (msg) => {
+    // Fired on all message creations, including your own
+    if (msg.fromMe) {
+      // do stuff here
+    }
+  });
+
+  client.on('message_revoke_everyone', async (after, before) => {
+    // Fired whenever a message is deleted by anyone (including you)
+    console.log(after); // message after it was deleted.
+    if (before) {
+      console.log(before); // message before it was deleted.
+    }
+  });
+
+  client.on('message_revoke_me', async (msg) => {
+    // Fired whenever a message is only deleted in your own view.
+    console.log(msg.body); // message before it was deleted.
+  });
+
+  client.on('message_ack', (msg, ack) => {
+    /*
+        == ACK VALUES ==
+        ACK_ERROR: -1
+        ACK_PENDING: 0
+        ACK_SERVER: 1
+        ACK_DEVICE: 2
+        ACK_READ: 3
+        ACK_PLAYED: 4
+    */
+
+    if (ack == 3) {
+      // The message was read
+    }
+  });
+
+  client.on('group_join', (notification) => {
+    // User has joined or been added to the group.
+    console.log('join', notification);
+    notification.reply('User joined.');
+  });
+
+  client.on('group_leave', (notification) => {
+    // User has left or been kicked from the group.
+    console.log('leave', notification);
+    notification.reply('User left.');
+  });
+
+  client.on('group_update', (notification) => {
+    // Group picture, subject or description has been updated.
+    console.log('update', notification);
+  });
+
+  client.on('change_battery', (batteryInfo) => {
+    // Battery percentage for attached device has changed
+    const { battery, plugged } = batteryInfo;
+    console.log(`Battery: ${battery}% - Charging? ${plugged}`);
   });
 });
 
-client.initialize().then((success)=>{
-  console.log('Wa Success : ', success);
-}).catch((error) => {
-  console.log('Wa Error : ', error);
-});
+client.initialize();
 /**
  * Listen on provided port, on all network interfaces.
  */

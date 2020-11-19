@@ -8,9 +8,20 @@
     border-radius: 4px;
     user-select: none;
 }
-.navbar-vertical.navbar-expand-xs .navbar-nav > .nav-item > .nav-link.active {
-    background: #222D84 !important;
+.navbar-vertical.navbar-expand-xs .navbar-nav > .nav-item > .nav-link.active {  
+    background-color: rgb(255, 255, 255);
+    border-right: 3px solid #9ea2a5;
+    border-radius: 1px;
+    border-spacing: 5px 0; 
+    margin-right: 1px;
+    color: #4E37B2; 
+    font-weight: 600;
 }
+
+.navbar-nav > .nav-item > .nav-link > i{
+    font-size: 18px;
+}
+
 .bg-primary{
     background: #222D84 !important;
 }
@@ -18,5 +29,18 @@
 
 .btn-primary{
     background: #222D84 !important;
+}
+ 
+.text-color-theme{
+    color: #9ea2a5;
+}
+
+.box-area{
+    width: 228px;
+    height: 228px;
+}
+
+#qrcode{
+    display: none;
 }
  
