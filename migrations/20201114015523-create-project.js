@@ -20,6 +20,9 @@ module.exports = {
       slug: {
         type: Sequelize.STRING
       },
+      token:{
+        type:Sequelize.STRING
+      },
       description: {
         type: Sequelize.STRING
       },
