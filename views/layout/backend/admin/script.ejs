@@ -24,11 +24,15 @@
 
         socket.on('qr', function (src) {
             console.log(src);
-            // $('#qrcode').attr('src', src);
+            $(".box-area").css("display","none");
+            $('#qrcode').css("display","block");
+            $('#qrcode').attr('src', src);
+            $(".barcode > .info").text("Barcode Scan Please!")
         });
 
         socket.on('ready', function (data) {
             console.log(data);
+            $(".barcode").css("display","none");
             // $('#qrcode').hide();
         });
 
@@ -72,5 +76,19 @@
                 }
             });
         });
+
+        function getProject(){
+            $.ajax({
+                ur:`/project/<%= user.id %>/all`,
+                headers: {token:`<%= token %>`}, 
+                success: function (success) {
+                   console.log(success);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
     });
 </script>

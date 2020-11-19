@@ -41,6 +41,15 @@ class ProjectController {
             console.log(e);
         }
     }
+
+    static getAll(req,res,next){
+        try{
+            const {id} = req.params;
+
+        }catch(e){
+
+        }
+    }
 }
 
 module.exports = ProjectController;

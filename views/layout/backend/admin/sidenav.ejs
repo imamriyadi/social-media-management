@@ -38,7 +38,7 @@
                     <% project.forEach(function (p) { %>
                         <li class="nav-item">
                             <a class="nav-link <%= p.slug === project_detail.slug ? " active":"" %>" href="/project/<%= p.slug %>">
-                                <i class="<%= p.medium.icon %> <%= p.slug === project_detail.slug ? " text-white":" text-primary" %>"></i>
+                                <i class="<%= p.medium.icon %> <%= p.slug === project_detail.slug ? " text-primary":" text-color-theme" %>"></i>
                                 <span class="nav-link-text"><%= p.name %></span>
                                 <hr class="my-2">
                             </a>
@@ -53,31 +53,31 @@
                 <ul class="navbar-nav">
                     <li class="nav-item">
                         <a class="nav-link" href="/member">
-                            <i class="ni ni-satisfied text-primary"></i>
+                            <i class="ni ni-satisfied text-color-theme"></i>
                             <span class="nav-link-text">Members</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/flow">
-                            <i class="ni ni-vector text-primary"></i>
+                            <i class="ni ni-vector text-color-theme"></i>
                             <span class="nav-link-text">Flow</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/module">
-                            <i class="ni ni-ui-04 text-primary"></i>
+                            <i class="ni ni-ui-04 text-color-theme"></i>
                             <span class="nav-link-text">Modules</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/analytics">
-                            <i class="ni ni-spaceship text-primary"></i>
+                            <i class="ni ni-spaceship text-color-theme"></i>
                             <span class="nav-link-text">Analytics</span>
                         </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/settings">
-                            <i class="ni ni-settings text-primary"></i>
+                            <i class="ni ni-settings text-color-theme"></i>
                             <span class="nav-link-text">Settings</span>
                         </a>
                     </li>
