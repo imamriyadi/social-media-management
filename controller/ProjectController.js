@@ -20,7 +20,7 @@ class ProjectController {
 
     static async viewDetails(req, res, next) {
         try {
-            const { id } = req.params;
+            const { id } = req.params; 
             const medias = await model.media.findAll();
             const project = await model.project.findAll({
                 include: [{
@@ -51,7 +51,7 @@ class ProjectController {
         }
     }
 
-    static async updateToken(token,slug) {
+    static async updateToken(token,slug) { 
         const tokenJson = JSON.stringify(token);
         try {
             console.log("Token Masuk: "+tokenJson);

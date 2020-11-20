@@ -10,18 +10,18 @@ var app = require('../app');
 var debug = require('debug')('wa-management:server');
 var http = require('http');
 const fs = require('fs');
-const ProjectController = require("../controller/ProjectController");
+const ProjectController = require("../controller/ProjectController"); 
+
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
+app.set('port', port); 
 /**
  * Create HTTP server.
  */
-
+  
 var server = http.createServer(app);
 const io = socketIO(server);
 
@@ -99,7 +99,7 @@ io.on('connection', function (socket) {
   });
 
   client.on('message', msg => {
-    socket.emit('message', msg);
+    socket.emit('message', msg); 
   });
 
   client.on('message_create', (msg) => {

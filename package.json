@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "simple": "nodemon ./service/index"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
@@ -22,6 +23,7 @@
     "qrcode": "^1.4.4",
     "sequelize": "^6.3.5",
     "socket.io": "^2.3.0",
+    "socket.io-client": "^3.0.3",
     "voca": "^1.4.0",
     "whatsapp-web.js": "^1.11.1"
   },
