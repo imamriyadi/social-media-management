@@ -16,21 +16,21 @@ module.exports = {
             {
                 name: "WhatsApp",
                 description: "Application WhatsApp",
-                icon:"fa-whatsapp",
+                icon:"fa fa-whatsapp",
                 createdAt: new Date(),
                 updatedAt: new Date()
             },
             {
                 name: "Telegram",
                 description: "Application Telegram",
-                icon:"fa-telegram",
+                icon:"fa fa-telegram",
                 createdAt: new Date(),
                 updatedAt: new Date()
             },
             {
                 name: "Facebook",
                 description: "Application Facebook Messenger",
-                icon:"fa-facebook-messenger",
+                icon:"fab fa-facebook-messenger",
                 createdAt: new Date(),
                 updatedAt: new Date()
             }];

@@ -10,24 +10,25 @@ var app = require('../app');
 var debug = require('debug')('wa-management:server');
 var http = require('http');
 const fs = require('fs');
+const ProjectController = require("../controller/ProjectController"); 
+
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-
+app.set('port', port); 
 /**
  * Create HTTP server.
  */
-
+  
 var server = http.createServer(app);
 const io = socketIO(server);
 
-const SESSION_FILE_PATH = "./bin/whatsapp-session.json";
+const SESSION_FILE_PATH = "/whatsapp-session.json";
 let sessionCfg;
 if (fs.existsSync(SESSION_FILE_PATH)) {
-  sessionCfg = require("./whatsapp-session.json");
+  sessionCfg = require(SESSION_FILE_PATH);
 }
 
 const client = new Client({
@@ -45,8 +46,7 @@ const client = new Client({
       '--disable-gpu'
     ],
   },
-  session: sessionCfg,
-  restartOnAuthFail: true
+  session: sessionCfg
 });
 
 // Socket IO
@@ -71,8 +71,13 @@ io.on('connection', function (socket) {
     socket.emit('authenticated', 'Whatsapp is authenticated!');
     socket.emit('message', 'Whatsapp is authenticated!');
     console.log('AUTHENTICATED', session);
-    sessionCfg = session;
-    fs.writeFile("./whatsapp-session.json", JSON.stringify(session), function (err) {
+    sessionCfg = session; 
+    ProjectController.updateToken(session).then(result =>{
+        console.log('Token Update :', result);
+    }).catch(err =>{
+      console.log('Token Gagal Update :', err);
+    });
+    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
       if (err) {
         console.error(err);
       }
@@ -94,7 +99,7 @@ io.on('connection', function (socket) {
   });
 
   client.on('message', msg => {
-    socket.emit('message', msg);
+    socket.emit('message', msg); 
   });
 
   client.on('message_create', (msg) => {

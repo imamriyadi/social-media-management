@@ -18,6 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     media_id: DataTypes.INTEGER,
     user_id: DataTypes.INTEGER,
     slug:DataTypes.STRING,
+    token:DataTypes.STRING,
     description: DataTypes.STRING
   }, {
     sequelize,
