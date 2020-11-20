@@ -14,16 +14,14 @@
 
 <script>
     $(document).ready(function () {
-        console.log()
         var socket = io.connect('http://localhost:3000', {path: '/socket.io'});
 
         socket.on('message', function (msg) {
             console.log(msg);
-            // $('.logs').append($('<li>').text(msg));
         });
 
         socket.on('qr', function (src) {
-            console.log(src);
+            $('#card-barcode').css("display","block");
             $(".box-area").css("display","none");
             $('#qrcode').css("display","block");
             $('#qrcode').attr('src', src);
@@ -31,14 +29,16 @@
         });
 
         socket.on('ready', function (data) {
-            console.log(data);
             $(".barcode").css("display","none");
-            // $('#qrcode').hide();
+            $('#card-barcode').css("display","none");
         });
 
         socket.on('authenticated', function (data) {
-            console.log(data);
-            // $('#qrcode').hide();
+            $('#card-barcode').css("display","none");
+        });
+
+        socket.on("disconnected",function (data){
+            $('#card-barcode').css("display","block");
         });
 
         $(".dropdown-toggle").click(function (e) {
@@ -56,39 +56,55 @@
         });
 
         $("#btn-add-project").click(function () {
-            const data = {
-                name: $("input[name='name']").val(),
-                user_id: $("input[name='user_id']").val(),
-                media_id: $("input[name='media_id']").val()
-            }
-            console.log(data);
-            $.ajax({
-                url: "/project/new",
-                method: "post",
-                headers: {token:`<%= token %>`},
-                data: data,
-                success: function (success) {
-                    $("#modal-add-project").modal('hide');
-                    $("input[name='name']").val("");
-                },
-                error: function (error) {
-                    console.log(error);
+            const name = $("input[name='name']").val();
+            const phone = $("input[name='phone']").val();
+            if(name !== "" && phone !==""){
+                const data = {
+                    name: $("input[name='name']").val(),
+                    phone:$("input[name='phone']").val(),
+                    user_id: $("input[name='user_id']").val(),
+                    media_id: $("input[name='media_id']").val()
                 }
-            });
+                $.ajax({
+                    url: "/project/new",
+                    method: "post",
+                    headers: {token:`<%= token %>`},
+                    data: data,
+                    success: function (success) {
+                        $("#modal-add-project").modal('hide');
+                        $("input[name='name']").val("");
+                        getProject();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            }else{
+
+            }
+
         });
 
         function getProject(){
             $.ajax({
-                ur:`/project/<%= user.id %>/all`,
-                headers: {token:`<%= token %>`}, 
+                url:`/project/all/<%= user.id %>`,
+                headers: {token:`<%= token %>`},
                 success: function (success) {
-                   console.log(success);
+                    for(p of success.project){
+                        $("#list-project").append(`<li class="nav-item">
+                            <a class="nav-link " href="/project/${p.slug}">
+                                <i class="${p.medium.icon} text-color-theme"></i>
+                                <span class="nav-link-text">${p.name}</span>
+                                <hr class="my-2">
+                            </a>
+                        </li>`);
+                    }
                 },
                 error: function (error) {
                     console.log(error);
                 }
             });
         }
-
+        getProject();
     });
 </script>

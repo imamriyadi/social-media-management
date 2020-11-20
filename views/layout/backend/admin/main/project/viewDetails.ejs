@@ -1,13 +1,13 @@
 
-<div class="container-fluid bg-white">
-    <h1><%= project_detail.name %></h1> 
+<div id="card-barcode" class="container-fluid bg-white">
+    <h1><%= project_detail.name %> - <%= project_detail.phone %></h1>
     <div class="card" style="width: 18rem;">
         <div class="card-body">
-            <div class="barcode"> 
+            <div class="barcode">
                 <div class="box-area"></div>
                 <img id="qrcode" src="" style="width: 228px;height: 228px;" width="228" height="228" alt="Barcode" >
                 <h6 class="card-subtitle mb-2 text-muted text-center info" >Loading ...</h6>
-            </div>  
+            </div>
         </div>
     </div>
 </div>
