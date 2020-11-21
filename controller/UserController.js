@@ -14,6 +14,7 @@ class UserController {
         if (User) {
             const payload = {
                 id: User.id,
+                username:User.username,
                 email: User.email
             };
             const token = generateToken(payload)

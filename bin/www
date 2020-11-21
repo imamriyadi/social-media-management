@@ -6,26 +6,27 @@
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const socketIO = require('socket.io');
-var app = require('../app'); 
+var app = require('../app');
 var debug = require('debug')('wa-management:server');
 var http = require('http');
 const fs = require('fs');
-const ProjectController = require("../controller/ProjectController"); 
+const ProjectController = require("../controller/ProjectController");
 
 /**
  * Get port from environment and store in Express.
  */
 
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port); 
+app.set('port', port);
 /**
  * Create HTTP server.
  */
-  
+
 var server = http.createServer(app);
 const io = socketIO(server);
 
-const SESSION_FILE_PATH = "/whatsapp-session.json";
+const SESSION_FILE_PATH = __dirname + `/../sessions/session_session.json`;
+
 let sessionCfg;
 if (fs.existsSync(SESSION_FILE_PATH)) {
   sessionCfg = require(SESSION_FILE_PATH);
@@ -49,10 +50,20 @@ const client = new Client({
   session: sessionCfg
 });
 
+client.initialize();
 // Socket IO
 io.on('connection', function (socket) {
   socket.emit('message', 'Connecting...');
+  io.emit('check', "check info");
 
+  socket.on("check_info",args => {
+    if(typeof(client.info) !== 'undefined'){
+      socket.emit('message', client.info.pushname);
+      socket.emit('isConnectWa', client.info.pushname);
+    }else {
+      socket.emit('notConnectWa', "Not Connected WA");
+    }
+  });
   client.on('qr', (qr) => {
     console.log('QR RECEIVED', qr);
     qrcode.toDataURL(qr, (err, url) => {
@@ -64,6 +75,7 @@ io.on('connection', function (socket) {
   client.on('ready', () => {
     socket.emit('ready', 'Whatsapp is ready!');
     socket.emit('message', 'Whatsapp is ready!');
+    socket.emit('message', client.info.phone);
   });
 
 
@@ -71,17 +83,17 @@ io.on('connection', function (socket) {
     socket.emit('authenticated', 'Whatsapp is authenticated!');
     socket.emit('message', 'Whatsapp is authenticated!');
     console.log('AUTHENTICATED', session);
-    sessionCfg = session; 
+    sessionCfg = session;
     ProjectController.updateToken(session).then(result =>{
         console.log('Token Update :', result);
     }).catch(err =>{
       console.log('Token Gagal Update :', err);
     });
-    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
-      if (err) {
-        console.error(err);
-      }
-    });
+    // fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
+    //   if (err) {
+    //     console.error(err);
+    //   }
+    // });
   });
 
   client.on('auth_failure', function (session) {
@@ -90,19 +102,43 @@ io.on('connection', function (socket) {
 
   client.on('disconnected', (reason) => {
     socket.emit('message', 'Whatsapp is disconnected!');
+    socket.emit('disconnected', 'Whatsapp is disconnected!');
+    client.destroy();
+    client.initialize();
     fs.unlinkSync(SESSION_FILE_PATH, function (err) {
       if (err) return console.log(err);
       console.log('Session file deleted!');
     });
-    client.destroy();
-    client.initialize();
+
   });
 
-  client.on('message', msg => {
-    socket.emit('message', msg); 
+  client.on('message', async msg => {
+    socket.emit('message', 'MESSAGE RECEIVED');
+    socket.emit('message', msg);
+    if (msg.body == '!ping reply') {
+      // Send a new message as a reply to the current one
+      msg.reply('pong');
+
+    } else if (msg.body == '!ping') {
+      // Send a new message to the same chat
+      client.sendMessage(msg.from, 'pong');
+
+    } else if (msg.body == '!info') {
+      let info = client.info;
+      client.sendMessage(msg.from, `
+            *Connection info*
+            User name: ${info.pushname}
+            My number: ${info.me.user}
+            Platform: ${info.platform}
+            WhatsApp version: ${info.phone.wa_version}
+        `);
+    }else {
+      client.sendMessage(msg.from, msg.body);
+    }
   });
 
   client.on('message_create', (msg) => {
+    console.log('NEW MESSAGE', msg);
     // Fired on all message creations, including your own
     if (msg.fromMe) {
       // do stuff here
@@ -123,6 +159,7 @@ io.on('connection', function (socket) {
   });
 
   client.on('message_ack', (msg, ack) => {
+    console.log('MESSAGE SENT', msg, ack);
     /*
         == ACK VALUES ==
         ACK_ERROR: -1
@@ -162,7 +199,6 @@ io.on('connection', function (socket) {
   });
 });
 
-client.initialize();
 /**
  * Listen on provided port, on all network interfaces.
  */

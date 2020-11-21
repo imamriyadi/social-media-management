@@ -28,7 +28,7 @@
     "whatsapp-web.js": "^1.11.1"
   },
   "devDependencies": {
-    "@types/node": "^14.14.8",
+    "@types/node": "^14.14.9",
     "sequelize-cli": "^6.2.0"
   }
 }

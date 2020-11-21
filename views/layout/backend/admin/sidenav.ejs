@@ -34,17 +34,7 @@
                 <h6 class="navbar-heading p-0 text-muted">
                     <span class="docs-normal">Main Project</span>
                 </h6>
-                <ul class="navbar-nav">
-                    <% project.forEach(function (p) { %>
-                        <li class="nav-item">
-                            <a class="nav-link <%= p.slug === project_detail.slug ? " active":"" %>" href="/project/<%= p.slug %>">
-                                <i class="<%= p.medium.icon %> <%= p.slug === project_detail.slug ? " text-primary":" text-color-theme" %>"></i>
-                                <span class="nav-link-text"><%= p.name %></span>
-                                <hr class="my-2">
-                            </a>
-                        </li>
-                    <% }) %>
-                </ul>
+                <ul class="navbar-nav" id="list-project"></ul>
                 <br>
                 <h6 class="navbar-heading p-0 text-muted">
                     <span class="docs-normal">Main Bot Studio</span>

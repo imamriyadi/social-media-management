@@ -1,13 +1,181 @@
-
-<div class="container-fluid bg-white">
-    <h1><%= project_detail.name %></h1> 
-    <div class="card" style="width: 18rem;">
+<div class="container-fluid">
+    <div class="card">
+        <h5 class="card-header">
+            <%= project_detail.name %>
+        </h5>
         <div class="card-body">
-            <div class="barcode"> 
-                <div class="box-area"></div>
-                <img id="qrcode" src="" style="width: 228px;height: 228px;" width="228" height="228" alt="Barcode" >
-                <h6 class="card-subtitle mb-2 text-muted text-center info" >Loading ...</h6>
-            </div>  
+            <div class="row">
+                <div class="col-md-6">
+                    <h5 class="card-title">Selamat Datang</h5>
+                    <p>Anda dapat mendesain asisten virtual untuk dapat berkomunikasi secara personal dan interaktif
+                        dengan konsumen Anda. Bahkan memberikan rekomendasi produk pada pelanggan potensial. Asisten
+                        virtual kami dapat mengotomatisasi proses layanan konsumen untuk berbagai industri, Anda juga
+                        dapat lebih menghemat biaya operasional perusahaan.</p>
+
+                    <p class="card-text">Anda Bisa mengirimkan Banyak pesan dengan 1 klik .</p>
+                    <br>
+
+                    <a href="#" class="btn btn-primary text-right"><i class="fa fa-send"></i> Send Messages</a>
+                </div>
+                <div class="col-md-6">
+                    <div class="row" id="placeholder-table">
+                        <div class="col-md-12">
+                            <div class="ph-item">
+                                <div class="ph-col-12">
+                                    <div class="ph-picture"></div>
+                                    <div class="ph-row">
+                                        <div class="ph-col-12 big"></div>
+                                        <div class="ph-col-12 big"></div>
+                                        <div class="ph-col-12 big"></div>
+                                        <div class="ph-col-12"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" id="placeholder">
+                        <div class="col-md-6">
+                            <div class="ph-item">
+                                <div class="ph-col-12">
+                                    <div class="ph-picture"></div>
+                                    <div class="ph-row">
+                                        <div class="ph-col-12 big"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="card-barcode" class="container-fluid bg-white">
+                        <div class="card" style="width: 18rem;">
+                            <div class="card-body">
+                                <div class="barcode"> 
+                                    <img id="qrcode" src="" style="width: 228px;height: 228px;" width="228" height="228" alt="Barcode">
+                                    <h6 class="card-subtitle mb-2 text-muted text-center info">Loading ...</h6>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                   <div id="group-menu-project">
+                       <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                           <li class="nav-item">
+                               <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Messager</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Members</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Groups</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Flow</a>
+                           </li>
+                           <li class="nav-item">
+                               <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact" aria-selected="false">Settings</a>
+                           </li>
+                       </ul>
+                       <div class="tab-content" id="pills-tabContent">
+                           <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                               <table class="table table-striped">
+                                   <thead>
+                                   <tr>
+                                       <th scope="col">#</th>
+                                       <th scope="col">First</th>
+                                       <th scope="col">Last</th>
+                                       <th scope="col">Handle</th>
+                                   </tr>
+                                   </thead>
+                                   <tbody>
+                                   <tr>
+                                       <th scope="row">1</th>
+                                       <td>Mark</td>
+                                       <td>Otto</td>
+                                       <td>@mdo</td>
+                                   </tr>
+                                   <tr>
+                                       <th scope="row">2</th>
+                                       <td>Jacob</td>
+                                       <td>Thornton</td>
+                                       <td>@fat</td>
+                                   </tr>
+                                   <tr>
+                                       <th scope="row">3</th>
+                                       <td>Larry</td>
+                                       <td>the Bird</td>
+                                       <td>@twitter</td>
+                                   </tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                           <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                               <table class="table table-striped">
+                                   <thead>
+                                   <tr>
+                                       <th scope="col">#</th>
+                                       <th scope="col">First</th>
+                                       <th scope="col">Last</th>
+                                       <th scope="col">Handle</th>
+                                   </tr>
+                                   </thead>
+                                   <tbody>
+                                   <tr>
+                                       <th scope="row">1</th>
+                                       <td>Mark</td>
+                                       <td>Otto</td>
+                                       <td>@mdo</td>
+                                   </tr>
+                                   <tr>
+                                       <th scope="row">2</th>
+                                       <td>Jacob</td>
+                                       <td>Thornton</td>
+                                       <td>@fat</td>
+                                   </tr>
+                                   <tr>
+                                       <th scope="row">3</th>
+                                       <td>Larry</td>
+                                       <td>the Bird</td>
+                                       <td>@twitter</td>
+                                   </tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                           <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                               <table class="table table-striped">
+                                   <thead>
+                                   <tr>
+                                       <th scope="col">#</th>
+                                       <th scope="col">First</th>
+                                       <th scope="col">Last</th>
+                                       <th scope="col">Handle</th>
+                                   </tr>
+                                   </thead>
+                                   <tbody>
+                                   <tr>
+                                       <th scope="row">1</th>
+                                       <td>Mark</td>
+                                       <td>Otto</td>
+                                       <td>@mdo</td>
+                                   </tr>
+                                   <tr>
+                                       <th scope="row">2</th>
+                                       <td>Jacob</td>
+                                       <td>Thornton</td>
+                                       <td>@fat</td>
+                                   </tr>
+                                   <tr>
+                                       <th scope="row">3</th>
+                                       <td>Larry</td>
+                                       <td>the Bird</td>
+                                       <td>@twitter</td>
+                                   </tr>
+                                   </tbody>
+                               </table>
+                           </div>
+                       </div>
+                   </div>
+                </div>
+            </div>
         </div>
     </div>
+
+
 </div>
