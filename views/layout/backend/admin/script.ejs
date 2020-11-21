@@ -16,6 +16,7 @@
     $(document).ready(function () {
         var socket = io.connect('http://localhost:3000', {path: '/socket.io'});
         const slug = `<%= project_detail.slug%>`;
+        const phone = `<%= project_detail.phone%>`;
         socket.on('message', function (msg) {
             console.log(msg);
         });
@@ -78,13 +79,19 @@
             $("#placeholder").css("display","block");
         }
 
-        socket.on('qr', function (src) {
-            showBarcodePlaceholder();
-            hideMenuAndBarcode();
-            showBarcode();
+        socket.on('qr', function (data) {
+            console.log(data);
+            const {from,qr} = data;
             $('#qrcode').css("display","block");
-            $('#qrcode').attr('src', src);
-            $(".barcode > .info").text("Barcode Scan Please!")
+            $('#qrcode').attr('src', data);
+            // if(from == phone){
+                showBarcodePlaceholder();
+                hideMenuAndBarcode();
+                showBarcode();
+                $('#qrcode').css("display","block");
+                // $('#qrcode').attr('src', qr);
+                $(".barcode > .info").text("Barcode Scan Please!")
+            // }
         });
 
         socket.on('ready', function (data) {
@@ -149,6 +156,7 @@
                     headers: {token:`<%= token %>`},
                     data: data,
                     success: function (success) {
+                        socket.emit('create_session', {name:name,phone:phone});
                         $("#modal-add-project").modal('hide');
                         $("input[name='name']").val("");
                         getProject();
@@ -158,7 +166,7 @@
                     }
                 });
             }else{
-
+                alert("Please select a project")
             }
 
         });

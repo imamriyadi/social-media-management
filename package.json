@@ -2,6 +2,10 @@
   "name": "wa-management",
   "version": "0.0.0",
   "private": true,
+  "nodemonConfig": {
+    "ignore": ["sessions/*", "docs/*"],
+    "delay": "2500"
+  },
   "scripts": {
     "start": "nodemon ./bin/www",
     "simple": "nodemon ./service/index"
