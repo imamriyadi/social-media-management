@@ -51,7 +51,6 @@
         }
 
         function showMenuTable(){
-            $("#placeholder-table").css("display","block");
             setTimeout(function(){
                 $("#placeholder-table").css("display","none");
             },1000);
@@ -60,17 +59,27 @@
             },1000);
         }
 
+        function showMenuTablePlaceholder(){
+            $('#group-menu-project').css("display","none");
+            $("#placeholder-table").css("display","block");
+        }
+
         function showBarcode(){
-            $("#placeholder").css("display","block");
             setTimeout(function(){
                 $("#placeholder").css("display","none");
-            },1000);
+            },500);
             setTimeout(function(){
                 $('#card-barcode').css("display","block");
-            },2000);
+            },500);
+        }
+
+        function showBarcodePlaceholder(){
+            $('#card-barcode').css("display","none");
+            $("#placeholder").css("display","block");
         }
 
         socket.on('qr', function (src) {
+            showBarcodePlaceholder();
             hideMenuAndBarcode();
             showBarcode();
             $('#qrcode').css("display","block");
@@ -80,17 +89,19 @@
 
         socket.on('ready', function (data) {
             hideMenuAndBarcode();
+            showMenuTablePlaceholder();
             showMenuTable();
         });
 
         socket.on('authenticated', function (data) {
             hideMenuAndBarcode();
+            showMenuTablePlaceholder();
             showMenuTable();
         });
 
         socket.on("disconnected",function (data){
             hideMenuAndBarcode();
-            showBarcode();
+            showBarcodePlaceholder();
         });
 
         socket.on('check', function (data) {
@@ -104,7 +115,7 @@
 
         socket.on('notConnectWa', function (data) {
             hideMenuAndBarcode();
-            showBarcode();
+            showBarcodePlaceholder();
         });
 
 
