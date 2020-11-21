@@ -1,8 +1,9 @@
 let sessions = {};
+const { Client } = require('whatsapp-web.js');
 const fs = require(`fs`);
 
 const MultiClient = (number) =>{
-    const SESSION_FILE_PATH = __dirname + `/../sessions/session_${number}.json`;
+    const SESSION_FILE_PATH = __dirname + `../sessions/session_${number}.json`;
     let sessionData;
     if (fs.existsSync(SESSION_FILE_PATH)) {
         sessionData = require(SESSION_FILE_PATH);
@@ -11,9 +12,16 @@ const MultiClient = (number) =>{
     const puppeteerOptions = {
         session: sessionData,
         puppeteer: {
-            //headless: false,
-            userDataDir: __dirname + `/../sessions/${number}`,
-            args: ['--no-sandbox', '--disable-setuid-sandbox']
+            userDataDir: __dirname + `../sessions/${number}`,
+            args: ['--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--disable-dev-shm-usage',
+                '--disable-accelerated-2d-canvas',
+                '--no-first-run',
+                '--no-zygote',
+                '--single-process', // <- this one doesn't works in Windows
+                '--disable-gpu'
+            ]
         }
     };
 

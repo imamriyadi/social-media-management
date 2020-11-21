@@ -25,7 +25,8 @@ app.set('port', port);
 var server = http.createServer(app);
 const io = socketIO(server);
 
-const SESSION_FILE_PATH = "/whatsapp-session.json";
+const SESSION_FILE_PATH = __dirname + `/../sessions/session_session.json`;
+
 let sessionCfg;
 if (fs.existsSync(SESSION_FILE_PATH)) {
   sessionCfg = require(SESSION_FILE_PATH);
@@ -49,6 +50,7 @@ const client = new Client({
   session: sessionCfg
 });
 
+client.initialize();
 // Socket IO
 io.on('connection', function (socket) {
   socket.emit('message', 'Connecting...');
@@ -87,11 +89,11 @@ io.on('connection', function (socket) {
     }).catch(err =>{
       console.log('Token Gagal Update :', err);
     });
-    fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
-      if (err) {
-        console.error(err);
-      }
-    });
+    // fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
+    //   if (err) {
+    //     console.error(err);
+    //   }
+    // });
   });
 
   client.on('auth_failure', function (session) {
@@ -110,11 +112,33 @@ io.on('connection', function (socket) {
 
   });
 
-  client.on('message', msg => {
+  client.on('message', async msg => {
+    socket.emit('message', 'MESSAGE RECEIVED');
     socket.emit('message', msg);
+    if (msg.body == '!ping reply') {
+      // Send a new message as a reply to the current one
+      msg.reply('pong');
+
+    } else if (msg.body == '!ping') {
+      // Send a new message to the same chat
+      client.sendMessage(msg.from, 'pong');
+
+    } else if (msg.body == '!info') {
+      let info = client.info;
+      client.sendMessage(msg.from, `
+            *Connection info*
+            User name: ${info.pushname}
+            My number: ${info.me.user}
+            Platform: ${info.platform}
+            WhatsApp version: ${info.phone.wa_version}
+        `);
+    }else {
+      client.sendMessage(msg.from, msg.body);
+    }
   });
 
   client.on('message_create', (msg) => {
+    console.log('NEW MESSAGE', msg);
     // Fired on all message creations, including your own
     if (msg.fromMe) {
       // do stuff here
@@ -135,6 +159,7 @@ io.on('connection', function (socket) {
   });
 
   client.on('message_ack', (msg, ack) => {
+    console.log('MESSAGE SENT', msg, ack);
     /*
         == ACK VALUES ==
         ACK_ERROR: -1
@@ -174,7 +199,6 @@ io.on('connection', function (socket) {
   });
 });
 
-client.initialize();
 /**
  * Listen on provided port, on all network interfaces.
  */
