@@ -69,7 +69,7 @@ class ProjectController {
                 token: tokenJson
             },{
                 where: {
-                    slug: "project-circle"
+                    slug: "dream-project"
                 }
             });
             return update;

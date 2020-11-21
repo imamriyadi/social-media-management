@@ -52,7 +52,16 @@ const client = new Client({
 // Socket IO
 io.on('connection', function (socket) {
   socket.emit('message', 'Connecting...');
+  io.emit('check', "check info");
 
+  socket.on("check_info",args => {
+    if(typeof(client.info) !== 'undefined'){
+      socket.emit('message', client.info.pushname);
+      socket.emit('isConnectWa', client.info.pushname);
+    }else {
+      socket.emit('notConnectWa', "Not Connected WA");
+    }
+  });
   client.on('qr', (qr) => {
     console.log('QR RECEIVED', qr);
     qrcode.toDataURL(qr, (err, url) => {
@@ -64,6 +73,7 @@ io.on('connection', function (socket) {
   client.on('ready', () => {
     socket.emit('ready', 'Whatsapp is ready!');
     socket.emit('message', 'Whatsapp is ready!');
+    socket.emit('message', client.info.phone);
   });
 
 

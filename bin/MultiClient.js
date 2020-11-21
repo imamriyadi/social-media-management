@@ -1,4 +1,5 @@
 let sessions = {};
+const fs = require(`fs`);
 
 const MultiClient = (number) =>{
     const SESSION_FILE_PATH = __dirname + `/../sessions/session_${number}.json`;
