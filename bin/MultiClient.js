@@ -1,9 +1,11 @@
 let sessions = {};
-const { Client } = require('whatsapp-web.js');
+let socket = null;
+const {Client} = require('whatsapp-web.js');
 const fs = require(`fs`);
-
-const MultiClient = (number) =>{
-    const SESSION_FILE_PATH = __dirname + `../sessions/session_${number}.json`;
+const qrcode = require('qrcode');
+const MultiClient = (number,sockets) => {
+    socket = sockets;
+    const SESSION_FILE_PATH = __dirname + `./../sessions/multi/session_${number}.json`;
     let sessionData;
     if (fs.existsSync(SESSION_FILE_PATH)) {
         sessionData = require(SESSION_FILE_PATH);
@@ -12,7 +14,6 @@ const MultiClient = (number) =>{
     const puppeteerOptions = {
         session: sessionData,
         puppeteer: {
-            userDataDir: __dirname + `../sessions/${number}`,
             args: ['--no-sandbox',
                 '--disable-setuid-sandbox',
                 '--disable-dev-shm-usage',
@@ -30,8 +31,27 @@ const MultiClient = (number) =>{
 
     sessions[number].initialize();
 
+    sessions[number].on('qr', (qr) => {
+        qrcode.toDataURL(qr, (err, url) => {
+            const data = {
+                from: number,
+                event: "qr",
+                qr: url
+            }
+            socket.emit('qr', data);
+            socket.emit('message', `QR Code received from ${number}, scan please!`);
+        });
+    });
+
     sessions[number].on('authenticated', (session) => {
         sessionData = session;
+        socket.emit('message', 'authenticated');
+        const authenticated = {
+            from: number,
+            event: "ready",
+            session: session
+        }
+        socket.emit('message', authenticated);
         fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
             if (err) console.log(err);
             else console.log(`Session stored`);
@@ -39,15 +59,33 @@ const MultiClient = (number) =>{
     });
 
     sessions[number].on("ready", (session) => {
-
+        const ready = {
+            from: number,
+            event: "ready",
+            session: session
+        }
+        console.log(ready);
+        socket.emit('message', ready);
     });
 
     sessions[number].on('disconnected', (reason) => {
-
+        const disconnected = {
+            from: number,
+            event: "disconnected",
+            session: reason
+        }
+        console.log(disconnected);
+        socket.emit('message', disconnected);
     });
 
     sessions[number].on('message', (msg) => {
-        socket.emit('message', msg);
+        const message = {
+            from: number,
+            event: "message",
+            session: msg
+        }
+        console.log(message);
+        socket.emit('message', message);
     });
 
     sessions[number].on('message_create', (msg) => {
@@ -98,7 +136,7 @@ const MultiClient = (number) =>{
     });
 
     sessions[number].on('change_battery', (batteryInfo) => {
-        const { battery, plugged } = batteryInfo;
+        const {battery, plugged} = batteryInfo;
         console.log(`Battery: ${battery}% - Charging? ${plugged}`);
     });
 
@@ -106,4 +144,4 @@ const MultiClient = (number) =>{
     return sessions[number];
 }
 
-module.exports = MultiClient;
+module.exports = {MultiClient};
