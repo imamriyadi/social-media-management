@@ -1,6 +1,27 @@
-# social media management 
+# Social Media Management 
  
-### Bagai mana cara menggunakan?
+
+###Fitur
+
+- [x] WhatsApp Bot
+   - [x] Single Client
+   - [x] Multi Client
+   - [ ] Broadcast Group
+   - [ ] Register Auto Reply 
+   - [ ] Grouping Number Response bot (Bot Hanya Akan meresponse nomer yang terdaftar) 
+   - [ ] Blocking Number Response bot (Bot Tidak Akan meresponse nomer Yang di block) 
+- [ ] Telegram Bot
+    - [ ] Single Client
+    - [ ] Multi Client
+- [ ] Facebook Messenger Bot
+    - [ ] Single Client
+    - [ ] Multi Client 
+- [ ] Group Members
+- [ ] Flow
+- [ ] Modules
+- [ ] Settings
+
+### Bagaimana cara menggunakan?
 - Clone repo ini 
 - Masuk ke directory project
 - Run `npm install`
@@ -9,6 +30,6 @@
 - Scan QR Code
 - Selesai !
 
-### catatan
+### Catatan
 Untuk memudahkan Pastikan Sudah melakukan install `nodemon` untuk mempermudah ketika ada perubahan kode akan melakukan perintah restaring pada service node silahkan lakukan   `npm i -g nodemon` command.
  
