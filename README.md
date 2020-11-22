@@ -1,7 +1,7 @@
 # Social Media Management 
  
 
-### Fitur
+### Rencana Fitur
 
 - [x] WhatsApp Bot
    - [x] Single Client
