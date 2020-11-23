@@ -1,0 +1,158 @@
+<script>
+    $(document).ready(function () {
+        var socket = io.connect('http://localhost:3000', {path: '/socket.io'});
+        const slug = `<%= project_detail.slug %>`;
+        const phone = `<%= project_detail.phone %>`;
+        socket.on('message', function (msg) {
+            console.log(msg);
+        });
+
+        function getProject() {
+            $.ajax({
+                url: `/project/all/<%= user.id %>`,
+                headers: {token: `<%= token %>`},
+                success: function (success) {
+                    $("#list-project").html("");
+                    for (p of success.project) {
+                        $("#list-project").append(`<li class="nav-item">
+                            <a class="nav-link " href="/project/${p.slug}">
+                                <i class="${p.medium.icon} ${p.slug === slug ? ' text-primary' : ' text-color-theme'}"></i>
+                                <span class="nav-link-text">${p.name}</span>
+                                <hr class="my-2">
+                            </a>
+                        </li>`);
+                    }
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        getProject();
+
+        function hideMenuAndBarcode() {
+            $("#placeholder").css("display", "none");
+            $("#placeholder-table").css("display", "none");
+            $('#card-barcode').css("display", "none");
+            $('#group-menu-project').css("display", "none");
+        }
+
+        function showMenuTable() {
+            setTimeout(function () {
+                $("#placeholder-table").css("display", "none");
+            }, 1000);
+            setTimeout(function () {
+                $('#group-menu-project').css("display", "block");
+            }, 1000);
+        }
+
+        function showMenuTablePlaceholder() {
+            $('#group-menu-project').css("display", "none");
+            $("#placeholder-table").css("display", "block");
+        }
+
+        function showBarcode() {
+            setTimeout(function () {
+                $("#placeholder").css("display", "none");
+            }, 500);
+            setTimeout(function () {
+                $('#card-barcode').css("display", "block");
+            }, 500);
+        }
+
+        function showBarcodePlaceholder() {
+            $('#card-barcode').css("display", "none");
+            $("#placeholder").css("display", "block");
+        }
+
+        socket.on('qr', function (data) {
+            const {from,qr} = data;
+            if (from == phone) {
+                showBarcodePlaceholder();
+                hideMenuAndBarcode();
+                showBarcode();
+                $('#qrcode').css("display", "block");
+                $('#qrcode').attr('src', qr);
+                $(".barcode > .info").text("Barcode Scan Please!")
+            }
+        });
+
+        socket.on('ready', function (data) {
+            hideMenuAndBarcode();
+            showMenuTablePlaceholder();
+            showMenuTable();
+        });
+
+        socket.on('authenticated', function (data) {
+            hideMenuAndBarcode();
+            showMenuTablePlaceholder();
+            showMenuTable();
+        });
+
+        socket.on("disconnected", function (data) {
+            hideMenuAndBarcode();
+            showBarcodePlaceholder();
+        });
+
+        socket.on('check', function (data) {
+            socket.emit('check_info', "Check Info");
+        });
+
+        socket.on('isConnectWa', function (data) {
+            hideMenuAndBarcode();
+            showMenuTable();
+        });
+
+        socket.on('notConnectWa', function (data) {
+            hideMenuAndBarcode();
+            showBarcodePlaceholder();
+        });
+
+
+        $(".dropdown-toggle").click(function (e) {
+            e.preventDefault();
+            $("#select-project").hasClass("show") ? $("#select-project").removeClass("show") : $("#select-project").addClass("show");
+        });
+
+        $(".project").click(function (e) {
+            const projectId = $(this).data("project_id");
+            const projectName = $(this).data("project_name");
+            $("#modal-add-project").modal('show');
+            $("#modal-add-project h5.modal-title").html("New " + projectName + " Project");
+            $("input[name='media_id']").val(projectId);
+            $("input[name='user_id']").val(<%= user.id %>);
+        });
+
+        $("#btn-add-project").click(function () {
+            const name = $("input[name='name']").val();
+            const phone = $("input[name='phone']").val();
+            if (name !== "" && phone !== "") {
+                const data = {
+                    name: $("input[name='name']").val(),
+                    phone: $("input[name='phone']").val(),
+                    user_id: $("input[name='user_id']").val(),
+                    media_id: $("input[name='media_id']").val()
+                }
+                $.ajax({
+                    url: "/project/new",
+                    method: "post",
+                    headers: {token: `<%= token %>`},
+                    data: data,
+                    success: function (success) {
+                        socket.emit('create_session', {name: name, phone: phone});
+                        $("#modal-add-project").modal('hide');
+                        $("input[name='name']").val("");
+                        getProject();
+                    },
+                    error: function (error) {
+                        console.log(error);
+                    }
+                });
+            } else {
+                alert("Please select a project")
+            }
+
+        });
+    });
+</script>
