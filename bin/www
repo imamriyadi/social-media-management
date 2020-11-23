@@ -42,7 +42,7 @@ const io = socketIO(server);
  */
 io.on('connection', function (socket) {
   socket.emit('message', 'Connecting Single Client...');
-  SingleClient(io);
+  SingleClient(io,socket);
 });
 
 /**

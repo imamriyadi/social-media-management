@@ -93,6 +93,7 @@
         });
 
         socket.on('check', function (data) {
+            console.log(data);
             socket.emit('check_info',"Check Info");
         });
 

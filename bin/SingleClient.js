@@ -3,17 +3,16 @@ const qrcode = require('qrcode');
 const fs = require('fs');
 const ProjectController = require("../controller/ProjectController");
 let socket = null;
+let io = null;
 const SESSION_FILE_PATH = __dirname + `/../sessions/single/session_session.json`;
 
-const SingleClient = (sockets) => {
-    socket = sockets;
+const SingleClient = (io,socket) => { 
     let sessionCfg;
     if (fs.existsSync(SESSION_FILE_PATH)) {
         sessionCfg = require(SESSION_FILE_PATH);
     }
 
-    const client = new Client({
-        restartOnAuthFail: true,
+    const client = new Client({ 
         puppeteer: {
             // userDataDir: __dirname + `/../sessions/single/data`,
             args: [
@@ -28,37 +27,39 @@ const SingleClient = (sockets) => {
             ],
             headless: true
         },
-        session: sessionCfg
+        session: sessionCfg,
+        takeoverOnConflict:true
     });
 
     client.initialize();
-    socket.emit('message', 'Connecting...');
-    socket.emit('check', "check info");
-    socket.on("check_info", args => {
+    io.emit('message', 'Connecting...');
+    io.emit('check', "check info");
+    socket.on("check_info", args => { 
+        io.emit('message', 'Check Info ...');
         if (typeof (client.info) !== 'undefined') {
-            socket.emit('message', client.info.pushname);
-            socket.emit('isConnectWa', client.info.pushname);
+            io.emit('message', client.info.pushname);
+            io.emit('isConnectWa', client.info.pushname);
         } else {
-            socket.emit('notConnectWa', "Not Connected WA");
+            io.emit('notConnectWa', "Not Connected WA");
         }
     });
     client.on('qr', (qr) => {
         console.log('QR RECEIVED', qr);
         qrcode.toDataURL(qr, (err, url) => {
-            socket.emit('qr', url);
-            socket.emit('message', 'QR Code received, scan please!');
+            io.emit('qr', url);
+            io.emit('message', 'QR Code received, scan please!');
         });
     });
 
     client.on('ready', () => {
-        socket.emit('ready', 'Whatsapp is ready!');
-        socket.emit('message', 'Whatsapp is ready!');
-        socket.emit('message', client.info.phone);
+        io.emit('ready', 'Whatsapp is ready!');
+        io.emit('message', 'Whatsapp is ready!');
+        io.emit('message', client.info.phone);
     });
 
 
     client.on('authenticated', (session) => {
-        socket.emit('message', 'Whatsapp is authenticated!');
+        io.emit('message', 'Whatsapp is authenticated!');
         sessionCfg = session;
         ProjectController.updateToken(session).then(result => {
             console.log('Token Update :', result);
@@ -74,11 +75,11 @@ const SingleClient = (sockets) => {
     });
 
     client.on('auth_failure', function (session) {
-        socket.emit('message', 'Auth failure, restarting...');
+        io.emit('message', 'Auth failure, restarting...');
     });
 
     client.on('disconnected', async (reason) => {
-        socket.emit('message', 'Whatsapp is disconnected!');
+        io.emit('message', 'Whatsapp is disconnected!');
         // sessionCfg = null;
         // client.destroy();
         // await fs.unlinkSync(SESSION_FILE_PATH, function (err) {
@@ -91,8 +92,8 @@ const SingleClient = (sockets) => {
     });
 
     client.on('message', msg => {
-        socket.emit('message', 'MESSAGE RECEIVED');
-        socket.emit('message', Math.random());
+        io.emit('message', 'MESSAGE RECEIVED');
+        io.emit('message', Math.random());
         if (msg.body === '!ping reply') {
             // Send a new message as a reply to the current one
             msg.reply('pong');
