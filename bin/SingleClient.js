@@ -59,13 +59,13 @@ const SingleClient = (sockets) => {
 
     client.on('authenticated', (session) => {
         socket.emit('message', 'Whatsapp is authenticated!');
-        console.log('AUTHENTICATED', session);
         sessionCfg = session;
         ProjectController.updateToken(session).then(result => {
             console.log('Token Update :', result);
         }).catch(err => {
             console.log('Token Gagal Update :', err);
         });
+        console.log("SESSION_FILE_PATH: "+SESSION_FILE_PATH)
         fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
             if (err) {
                 console.error(err);
@@ -77,16 +77,17 @@ const SingleClient = (sockets) => {
         socket.emit('message', 'Auth failure, restarting...');
     });
 
-    client.on('disconnected', (reason) => {
+    client.on('disconnected', async (reason) => {
         socket.emit('message', 'Whatsapp is disconnected!');
-        socket.emit('disconnected', 'Whatsapp is disconnected!');
-        client.destroy();
-        sessionCfg = null;
-        fs.unlinkSync(SESSION_FILE_PATH, function (err) {
-            if (err) return console.log(err);
-            console.log('Session file deleted!');
-        });
-        client.initialize();
+        // sessionCfg = null;
+        // client.destroy();
+        // await fs.unlinkSync(SESSION_FILE_PATH, function (err) {
+        //     if (err) return console.log(err);
+        //     console.log('Session file deleted!');
+        // });
+        // setTimeout(function () {
+        //     client.initialize();
+        // },3000);
     });
 
     client.on('message', msg => {
