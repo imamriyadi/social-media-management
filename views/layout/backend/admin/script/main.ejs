@@ -1,0 +1,32 @@
+<script>
+    $(() => {
+        $("#btn-add-messages").click(function (e) {
+            e.preventDefault();
+            $("#modal-send-messages").modal({ backdrop: 'static', keyboard: false });
+            $("#modal-send-messages input").val("");
+            $("#modal-send-messages textarea").val("");
+        });
+
+        $("#btn-send").click(function (e) {
+            e.preventDefault();
+            const phone_number = $("#modal-send-messages input[name='phone_number']").val();
+            const messages = $("#modal-send-messages textarea[name='messages']").val();
+
+            $.ajax({
+                url: '/message/create',
+                method: 'POST',
+                data: { phone_number: phone_number, messages: messages },
+                headers: { token: `<%= token %>` },
+                success: function (data) {
+                    const { status } = data;
+                    if (status == "success") {
+                        $("#modal-send-messages").modal("hide");
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        })
+    });
+</script>

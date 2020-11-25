@@ -1,3 +1,4 @@
+// @ts-nocheck
 const createError = require('http-errors');
 const express = require('express');
 const session = require('express-session');
@@ -6,13 +7,13 @@ const socketIo = require("socket.io");
 const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
-const bodyParser = require('body-parser');
-
+const bodyParser = require('body-parser'); 
+global.client = null;
 const indexRouter = require('./routes/index');
 const loginRouter = require('./routes/login');
 const usersRouter = require('./routes/users');
 const projectRouter = require('./routes/project');
-
+const messageRouter = require('./routes/message');
 const app = express();
 
 // view engine setup
@@ -36,6 +37,8 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 app.use('/project', projectRouter);
+app.use('/message', messageRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -1,18 +1,17 @@
-const {Client} = require('whatsapp-web.js');
-const qrcode = require('qrcode');
+// @ts-nocheck
+const { Client } = require('whatsapp-web.js');
+const qrcode = require('qrcode'); 
 const fs = require('fs');
+require('../app');
 const ProjectController = require("../controller/ProjectController");
-let socket = null;
-let io = null;
 const SESSION_FILE_PATH = __dirname + `/../sessions/single/session_session.json`;
-
-const SingleClient = (io,socket) => { 
+const SingleClient = (io, socket) => {
     let sessionCfg;
     if (fs.existsSync(SESSION_FILE_PATH)) {
         sessionCfg = require(SESSION_FILE_PATH);
     }
 
-    const client = new Client({ 
+    global.client = new Client({
         puppeteer: {
             // userDataDir: __dirname + `/../sessions/single/data`,
             args: [
@@ -28,13 +27,14 @@ const SingleClient = (io,socket) => {
             headless: true
         },
         session: sessionCfg,
-        takeoverOnConflict:true
+        takeoverOnConflict: true
     });
 
     client.initialize();
+
     io.emit('message', 'Connecting...');
     io.emit('check', "check info");
-    socket.on("check_info", args => { 
+    socket.on("check_info", args => {
         io.emit('message', 'Check Info ...');
         if (typeof (client.info) !== 'undefined') {
             io.emit('message', client.info.pushname);
@@ -66,7 +66,7 @@ const SingleClient = (io,socket) => {
         }).catch(err => {
             console.log('Token Gagal Update :', err);
         });
-        console.log("SESSION_FILE_PATH: "+SESSION_FILE_PATH)
+        console.log("SESSION_FILE_PATH: " + SESSION_FILE_PATH)
         fs.writeFile(SESSION_FILE_PATH, JSON.stringify(session), function (err) {
             if (err) {
                 console.error(err);
@@ -93,7 +93,6 @@ const SingleClient = (io,socket) => {
 
     client.on('message', msg => {
         io.emit('message', 'MESSAGE RECEIVED');
-        io.emit('message', Math.random());
         if (msg.body === '!ping reply') {
             // Send a new message as a reply to the current one
             msg.reply('pong');
@@ -173,10 +172,10 @@ const SingleClient = (io,socket) => {
 
     client.on('change_battery', (batteryInfo) => {
         // Battery percentage for attached device has changed
-        const {battery, plugged} = batteryInfo;
+        const { battery, plugged } = batteryInfo;
         console.log(`Battery: ${battery}% - Charging? ${plugged}`);
     });
 }
 
 
-module.exports = {SingleClient};
+module.exports = { SingleClient };
