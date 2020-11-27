@@ -40,10 +40,10 @@ const io = socketIO(server);
 /**
  * Single client
  */
-io.on('connection', function (socket) {
-  socket.emit('message', 'Connecting Single Client...');
-  SingleClient(io,socket);
-});
+// io.on('connection', function (socket) {
+//   socket.emit('message', 'Connecting Single Client...');
+  SingleClient(io);
+// });
 
 /**
  * Listen on provided port, on all network interfaces.
