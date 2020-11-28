@@ -1,7 +1,7 @@
 'use strict';
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('intents', {
+    await queryInterface.createTable('flows', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -11,23 +11,14 @@ module.exports = {
       user_id: {
         type: Sequelize.INTEGER
       },
-      intent_name: {
+      flow_name: {
         type: Sequelize.STRING
       },
-      intent_type: {
-        type: Sequelize.STRING
-      },
-      entity_id: {
+      project_id: {
         type: Sequelize.INTEGER
       },
-      flow_id:{
-        type:Sequelize.INTEGER
-      },
-      keyword_name: {
-        type: Sequelize.STRING
-      },
-      keyword_id: {
-        type: Sequelize.STRING
+      is_active: {
+        type: Sequelize.INTEGER(1)
       },
       createdAt: {
         allowNull: false,
@@ -40,6 +31,6 @@ module.exports = {
     });
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('intents');
+    await queryInterface.dropTable('flows');
   }
 };

@@ -47,6 +47,14 @@
             },1000);
         }
 
+        function showInfoDevice(){
+            $('#card-info-device').css("display","block");
+        }
+
+        function hideInfoDevice(){
+            $('#card-info-device').css("display","none");
+        }
+
         function showMenuTablePlaceholder(){
             $('#group-menu-project').css("display","none");
             $("#placeholder-table").css("display","block");
@@ -69,6 +77,7 @@
         socket.on('qr', function (qr) {
             showBarcodePlaceholder();
             hideMenuAndBarcode();
+            hideInfoDevice();
             showBarcode();
             $('#qrcode').css("display","block");
             $('#qrcode').attr('src', qr);
@@ -79,27 +88,30 @@
             hideMenuAndBarcode();
             showMenuTablePlaceholder();
             showMenuTable();
+            showInfoDevice();
         });
 
         socket.on('authenticated', function (data) {
             hideMenuAndBarcode();
             showMenuTablePlaceholder();
             showMenuTable();
+            showInfoDevice();
         });
 
         socket.on("disconnected",function (data){
             hideMenuAndBarcode();
             showBarcodePlaceholder();
+            hideInfoDevice();
         });
 
         socket.on('check', function (data) {
-            console.log(data);
             socket.emit('check_info',"Check Info");
         });
 
         socket.on('isConnectWa', function (data) {
             hideMenuAndBarcode();
             showMenuTable();
+            showInfoDevice();
         });
 
         socket.on('notConnectWa', function (data) {

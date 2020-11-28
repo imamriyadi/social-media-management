@@ -59,3 +59,13 @@
 #placeholder{
     display: none;
 }
+
+.list-group-item.active {
+    border-color: #222d84;
+    background-color: #222d84;
+}
+
+
+#card-info-device{
+    display: none;
+}

@@ -8,7 +8,7 @@ class AdminController {
               include:[{
                   model:media
               }]
-          }); 
+          });
           res.render('layout/backend/admin', {
               slug:"",
               title: 'Dashboard',

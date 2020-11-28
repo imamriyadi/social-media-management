@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       intent.hasOne(models.users,{foreignKey:'id',sourceKey:'user_id'});
       intent.hasOne(models.entity,{foreignKey:'id',sourceKey:'entity_id'});
+      intent.hasOne(models.flow,{foreignKey:'id',sourceKey:'flow_id'});
     }
   };
   intent.init({
@@ -20,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
     intent_name: DataTypes.STRING,
     intent_type: DataTypes.STRING,
     entity_id: DataTypes.INTEGER,
+    flow_id: DataTypes.INTEGER,
     keyword_name: DataTypes.STRING,
     keyword_id: DataTypes.STRING
   }, {
