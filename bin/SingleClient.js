@@ -18,7 +18,7 @@ const SingleClient = (io) => {
             args: [
                 '--no-sandbox',
                 '--disable-setuid-sandbox',
-                '--disable-dev-shm-usage',    
+                '--disable-dev-shm-usage',
                 '--disable-accelerated-2d-canvas',
                 '--no-first-run',
                 '--no-zygote',
@@ -28,13 +28,14 @@ const SingleClient = (io) => {
             headless: true
         },
         session: sessionCfg,
-        takeoverOnConflict: true
+        takeoverOnConflict: true,
+        restartOnAuthFail: true
     });
 
     client.initialize();
 
     io.on('connection', function (sockets) {
-        socket = sockets; 
+        socket = sockets;
         io.emit('message', 'Connecting...');
         io.emit('check', "check info");
         socket.on("check_info", args => {
@@ -90,7 +91,7 @@ const SingleClient = (io) => {
 
     client.on('disconnected', async (reason) => {
         io.emit('message', 'Whatsapp is disconnected!');
-        io.emit('disconnected', 'Whatsapp is disconnected!'); 
+        io.emit('disconnected', 'Whatsapp is disconnected!');
         sessionCfg = null;
         client.destroy();
         await fs.unlinkSync(SESSION_FILE_PATH, function (err) {
@@ -121,7 +122,7 @@ const SingleClient = (io) => {
             Platform: ${info.platform}
             WhatsApp version: ${info.phone.wa_version}
         `);
-         
+
         }else if(msg.body === "kamu siapa"){
             client.sendMessage(msg.from, 'Aku nidhom');
         }else {

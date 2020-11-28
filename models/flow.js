@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class media extends Model {
+  class flow extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,17 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      media.belongsTo(models.users,{foreignKey:'id'});
+      flow.hasOne(models.users,{foreignKey:'id',sourceKey:'user_id'});
+      flow.hasOne(models.project,{foreignKey:'id',sourceKey:'project_id'})
     }
   };
-  media.init({
-    name: DataTypes.STRING,
-    description: DataTypes.STRING,
-    icon:DataTypes.STRING,
+  flow.init({
+    user_id: DataTypes.INTEGER,
+    flow_name: DataTypes.STRING,
+    project_id:DataTypes.INTEGER,
     is_active: DataTypes.INTEGER
   }, {
     sequelize,
-    modelName: 'media',
+    modelName: 'flow',
   });
-  return media;
+  return flow;
 };

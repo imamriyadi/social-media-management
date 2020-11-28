@@ -2,7 +2,7 @@
     $(() => {
         $("#btn-add-messages").click(function (e) {
             e.preventDefault();
-            $("#modal-send-messages").modal({ backdrop: 'static', keyboard: false });
+            $("#modal-send-messages").modal({backdrop: 'static', keyboard: false});
             $("#modal-send-messages input").val("");
             $("#modal-send-messages textarea").val("");
         });
@@ -15,10 +15,10 @@
             $.ajax({
                 url: '/message/create',
                 method: 'POST',
-                data: { phone_number: phone_number, messages: messages },
-                headers: { token: `<%= token %>` },
+                data: {phone_number: phone_number, messages: messages},
+                headers: {token: `<%= token %>`},
                 success: function (data) {
-                    const { status } = data;
+                    const {status} = data;
                     if (status == "success") {
                         $("#modal-send-messages").modal("hide");
                     }
@@ -27,6 +27,12 @@
                     console.log(data);
                 }
             });
+        });
+
+        $("#add-module").click(function () {
+            const flow_name = $("input[name='module_name']");
+            $("#table-module tbody").append(`<tr><td>${flow_name.val()}</td></tr>`);
+            flow_name.val("")
         })
     });
 </script>

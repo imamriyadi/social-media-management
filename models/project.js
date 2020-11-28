@@ -27,8 +27,8 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   project.associate = (models) =>{
-    project.hasOne(models.users,{foreignKey:'id',sourceKey:'user_id'});
     project.hasOne(models.media,{foreignKey:'id',sourceKey:'media_id'});
+    project.hasOne(models.users,{foreignKey:'id',sourceKey:'user_id'});
   }
   return project;
 };
