@@ -14,9 +14,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   state.init({
-    state_name: DataTypes.STRING,
-    state_action_type: DataTypes.STRING,
-    state_conditions: DataTypes.STRING
+    state_name: DataTypes.STRING(150),
+    state_action_type: DataTypes.STRING(150),
+    state_conditions: DataTypes.STRING(150)
   }, {
     sequelize,
     modelName: 'state',

@@ -14,11 +14,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   project.init({
-    name: DataTypes.STRING,
-    media_id: DataTypes.INTEGER,
-    user_id: DataTypes.INTEGER,
-    slug:DataTypes.STRING,
-    phone:DataTypes.STRING,
+    name: DataTypes.STRING(200),
+    media_id: DataTypes.INTEGER(3),
+    user_id: DataTypes.INTEGER(3),
+    slug:DataTypes.STRING(50),
+    phone:DataTypes.STRING(25),
     token:DataTypes.STRING,
     description: DataTypes.STRING
   }, {

@@ -16,10 +16,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   flow.init({
-    user_id: DataTypes.INTEGER,
-    flow_name: DataTypes.STRING,
-    project_id:DataTypes.INTEGER,
-    is_active: DataTypes.INTEGER
+    user_id: DataTypes.INTEGER(3),
+    flow_name: DataTypes.STRING(150),
+    flow_conversation: DataTypes.STRING,
+    project_id:DataTypes.INTEGER(3),
+    is_active: DataTypes.INTEGER(1)
   }, {
     sequelize,
     modelName: 'flow',

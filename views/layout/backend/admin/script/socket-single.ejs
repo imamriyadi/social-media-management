@@ -8,6 +8,15 @@
             console.log(msg);
         });
 
+        socket.on('message_live', function (msg) {
+            const total_row = $("#live-chat tbody tr").length;
+            const {from,to,body,timestamp} = msg;
+            if(total_row == 7){
+                $("#live-chat tbody tr").eq(0).remove();
+            }
+            $("#live-chat tbody").append(`<tr><th scope="row"> ${from} </th> <th scope="row"> ${to} </th>  <td> ${body} </td> <td>response </td> <td><i class="fas fa-calendar-times text-success mr-3"></i> ${new Date(timestamp * 1000).toLocaleString()} </td> </tr>`);
+        });
+
         function getProject(){
             $.ajax({
                 url:`/project/all/<%= user.id %>`,

@@ -30,9 +30,11 @@
         });
 
         $("#add-module").click(function () {
-            const flow_name = $("input[name='module_name']");
-            $("#table-module tbody").append(`<tr><td>${flow_name.val()}</td></tr>`);
-            flow_name.val("")
+            const flow_name = $("input[name='modules_name']");
+            if(flow_name.val() != ''){
+                $("#table-module tbody").append(`<tr><td>${flow_name.val()}</td></tr>`);
+                flow_name.val("")
+            }
         })
     });
 </script>

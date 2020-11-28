@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   media.init({
-    name: DataTypes.STRING,
+    name: DataTypes.STRING(150),
     description: DataTypes.STRING,
-    icon:DataTypes.STRING,
-    is_active: DataTypes.INTEGER
+    icon:DataTypes.STRING(150),
+    is_active: DataTypes.INTEGER(1)
   }, {
     sequelize,
     modelName: 'media',
