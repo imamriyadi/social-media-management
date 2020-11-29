@@ -31,10 +31,18 @@
 
         $("#add-module").click(function () {
             const flow_name = $("input[name='modules_name']");
-            if(flow_name.val() != ''){
+            if (flow_name.val() != '') {
                 $("#table-module tbody").append(`<tr><td>${flow_name.val()}</td></tr>`);
                 flow_name.val("")
             }
-        })
+        });
+        $("#btn-add-module-form").click(function () {
+            const total = $("table#table-module-form tbody tr").length;
+            $(`table#table-module-form tbody tr:nth-child(${total})`).before(`<tr> <td> <input type="text" class="form-control" placeholder="Module"> </td> <td width="25%"> <input type="number" class="form-control" placeholder="Key"> </td> <td class="text-center"> <button class="btn btn-danger btn-sm btn-remove-module-form" type="button"><i class="fa fa-trash"></i></button> </td> </tr>`);
+        });
+        $("#table-module-form").on("click", "tr .btn-remove-module-form", function(e) {
+            $(this).parents("tr").remove();
+            console.log($(this).parents("tr").index());
+        });
     });
 </script>
