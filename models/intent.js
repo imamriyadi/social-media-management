@@ -17,13 +17,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   intent.init({
-    user_id: DataTypes.INTEGER,
-    intent_name: DataTypes.STRING,
-    intent_type: DataTypes.STRING,
-    entity_id: DataTypes.INTEGER,
-    flow_id: DataTypes.INTEGER,
+    user_id: DataTypes.INTEGER(5),
+    intent_name: DataTypes.STRING(150),
+    intent_type: DataTypes.STRING(150),
+    entity_id: DataTypes.INTEGER(3),
+    flow_id: DataTypes.INTEGER(3),
     keyword_name: DataTypes.STRING,
-    keyword_id: DataTypes.STRING
+    keyword_id: DataTypes.INTEGER(3)
   }, {
     sequelize,
     modelName: 'intent',

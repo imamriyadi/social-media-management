@@ -12,8 +12,17 @@ class ProjectController {
                 slug: slugify(name),
                 phone:phone
             }
-            const insert = await model.project.create(data);
-            res.status(200).json(insert);
+            const project = await model.project.create(data);
+            if(project){
+                const flow_data = {
+                    user_id:user_id,
+                    flow_name:name,
+                    project_id:project.id,
+                    is_active:1
+                }
+                await model.flow.create(flow_data);
+            }
+            res.status(200).json(project);
         } catch (e) {
             res.status(500).json(JSON.stringify(e));
         }

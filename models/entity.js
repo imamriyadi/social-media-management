@@ -16,15 +16,15 @@ module.exports = (sequelize, DataTypes) => {
   };
   entity.init({
     user_id: DataTypes.INTEGER,
-    entity_name: DataTypes.STRING,
-    entity_value: DataTypes.STRING,
-    entity_score: DataTypes.STRING,
-    entity_type: DataTypes.STRING,
+    entity_name: DataTypes.STRING(150),
+    entity_value: DataTypes.STRING(150),
+    entity_score: DataTypes.STRING(50),
+    entity_type: DataTypes.STRING(150),
     entity_keywords: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'entity',
   });
- 
+
   return entity;
 };

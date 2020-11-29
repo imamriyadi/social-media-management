@@ -105,6 +105,7 @@ const SingleClient = (io) => {
 
     client.on('message', msg => {
         io.emit('message', 'MESSAGE RECEIVED');
+        io.emit('message_live',msg);
         if (msg.body === '!ping reply') {
             // Send a new message as a reply to the current one
             msg.reply('pong');
@@ -135,6 +136,7 @@ const SingleClient = (io) => {
         // Fired on all message creations, including your own
         if (msg.fromMe) {
             // do stuff here
+            io.emit('message_live',msg);
         }
     });
 

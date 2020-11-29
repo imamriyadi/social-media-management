@@ -15,7 +15,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   keywords.init({
-    entity_id: DataTypes.INTEGER,
+    entity_id: DataTypes.INTEGER(3),
     keyword_name: DataTypes.STRING,
     keyword_variations: DataTypes.STRING
   }, {
