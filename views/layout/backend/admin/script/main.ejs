@@ -9,18 +9,19 @@
 
         $("#btn-send").click(function (e) {
             e.preventDefault();
-            const phone_number = $("#modal-send-messages input[name='phone_number']").val();
-            const messages = $("#modal-send-messages textarea[name='messages']").val();
+            const phone_number = $("#modal-send-messages input[name='phone_number']");
+            const messages = $("#modal-send-messages textarea[name='messages']");
 
             $.ajax({
                 url: '/message/create',
                 method: 'POST',
-                data: {phone_number: phone_number, messages: messages},
+                data: {phone_number: phone_number.val(), messages: messages.val()},
                 headers: {token: `<%= token %>`},
                 success: function (data) {
                     const {status} = data;
-                    if (status == "success") {
-                        $("#modal-send-messages").modal("hide");
+                    if (status === "success") {
+                        messages.val("");
+                        // $("#modal-send-messages").modal("hide");
                     }
                 },
                 error: function (data) {
