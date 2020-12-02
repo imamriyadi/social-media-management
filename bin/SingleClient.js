@@ -81,12 +81,12 @@ const SingleClient = (io) => {
         });
     });
 
-    client.on('auth_failure', async function (session) {
+    client.on('auth_failure',  function (session) {
         io.emit('message', 'Auth failure, restarting...');
-        // await fs.unlinkSync(SESSION_FILE_PATH, function (err) {
-        //     if (err) return console.log(err);
-        //     console.log('Session file deleted!');
-        // });
+        fs.unlinkSync(SESSION_FILE_PATH, function (err) {
+            if (err) return console.log(err);
+            console.log('Session file deleted!');
+        });
     });
 
     client.on('disconnected', async (reason) => {

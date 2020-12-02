@@ -23,12 +23,12 @@
 }
 
 .bg-primary{
-    background: #222D84 !important;
+    background: #5D21D2 !important;
 }
 
 
 .btn-primary{
-    background: #222D84 !important;
+    background: #5D21D2 !important;
 }
 
 .text-color-theme{
@@ -61,8 +61,8 @@
 }
 
 .list-group-item.active {
-    border-color: #222d84;
-    background-color: #222d84;
+    border-color: #5D21D2;;
+    background-color: #5D21D2;;
 }
 
 
