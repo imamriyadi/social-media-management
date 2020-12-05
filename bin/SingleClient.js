@@ -1,4 +1,5 @@
 // @ts-nocheck
+const { NlpManager } = require('node-nlp');
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 const fs = require('fs');
@@ -6,7 +7,12 @@ require('../app');
 const ProjectController = require("../controller/ProjectController");
 const SESSION_FILE_PATH = __dirname + `/../sessions/single/session_session.json`;
 let socket = null;
-const SingleClient = (io) => {
+
+const SingleClient = async (io) => {
+    const manager = new NlpManager({ languages: ['id'], forceNER: true });
+    manager.addCorpus(__dirname +'/../corpus/id.json');
+    await manager.train();
+    manager.save();
     let sessionCfg;
     if (fs.existsSync(SESSION_FILE_PATH)) {
         sessionCfg = require(SESSION_FILE_PATH);
@@ -81,7 +87,7 @@ const SingleClient = (io) => {
         });
     });
 
-    client.on('auth_failure',  function (session) {
+    client.on('auth_failure', function (session) {
         io.emit('message', 'Auth failure, restarting...');
         fs.unlinkSync(SESSION_FILE_PATH, function (err) {
             if (err) return console.log(err);
@@ -100,35 +106,39 @@ const SingleClient = (io) => {
         });
         setTimeout(function () {
             client.initialize();
-        },3000);
+        }, 3000);
     });
 
     client.on('message', msg => {
         io.emit('message', 'MESSAGE RECEIVED');
-        io.emit('message_live',msg);
-        if (msg.body === '!ping reply') {
-            // Send a new message as a reply to the current one
-            msg.reply('pong');
-
-        } else if (msg.body === '!ping') {
-            // Send a new message to the same chat
-            client.sendMessage(msg.from, 'pong');
-
-        } else if (msg.body === '!info') {
-            let info = client.info;
-            client.sendMessage(msg.from, `
-            *Connection info*
-            User name: ${info.pushname}
-            My number: ${info.me.user}
-            Platform: ${info.platform}
-            WhatsApp version: ${info.phone.wa_version}
-        `);
-
-        }else if(msg.body === "kamu siapa"){
-            client.sendMessage(msg.from, 'Aku nidhom');
-        }else {
-            client.sendMessage(msg.from, msg.body);
-        }
+        io.emit('message_live', msg);
+        manager.process('id', msg.body).then(value => {
+            console.log(value);
+            client.sendMessage(msg.from, value.answer);
+        });
+        // if (msg.body === '!ping reply') {
+        //     // Send a new message as a reply to the current one
+        //     msg.reply('pong');
+        //
+        // } else if (msg.body === '!ping') {
+        //     // Send a new message to the same chat
+        //     client.sendMessage(msg.from, 'pong');
+        //
+        // } else if (msg.body === '!info') {
+        //     let info = client.info;
+        //     client.sendMessage(msg.from, `
+        //     *Connection info*
+        //     User name: ${info.pushname}
+        //     My number: ${info.me.user}
+        //     Platform: ${info.platform}
+        //     WhatsApp version: ${info.phone.wa_version}
+        // `);
+        //
+        // }else if(msg.body === "kamu siapa"){
+        //     client.sendMessage(msg.from, 'Aku nidhom');
+        // }else {
+        //     client.sendMessage(msg.from, msg.body);
+        // }
     });
 
     client.on('message_create', (msg) => {
@@ -136,7 +146,7 @@ const SingleClient = (io) => {
         // Fired on all message creations, including your own
         if (msg.fromMe) {
             // do stuff here
-            io.emit('message_live',msg);
+            io.emit('message_live', msg);
         }
     });
 
@@ -189,7 +199,7 @@ const SingleClient = (io) => {
 
     client.on('change_battery', (batteryInfo) => {
         // Battery percentage for attached device has changed
-        const { battery, plugged } = batteryInfo;
+        const {battery, plugged} = batteryInfo;
         console.log(`Battery: ${battery}% - Charging? ${plugged}`);
     });
 }
