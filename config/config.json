@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "root",
-    "password": "",
+    "password": "namakamu",
     "database": "sosial_media_management",
     "host": "localhost",
     "dialect": "mysql"
