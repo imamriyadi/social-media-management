@@ -23,7 +23,7 @@
             if(total_row == 7){
                 $("#live-chat tbody tr").eq(0).remove();
             }
-            $("#live-chat tbody").append(`<tr><th scope="row"><span class="badge ${items[rand(0, items.length - 1)]}">${from}</span></th> <th scope="row"> <span class="badge ${items[rand(0, items.length - 1)]}">${to}</span> </th>  <td> ${body} </td><td><i class="fas fa-calendar-times text-success mr-3"></i> ${new Date(timestamp * 1000).toLocaleString()} </td> </tr>`);
+            $("#live-chat tbody").append(`<tr><th scope="row"><span class="badge badge-primary">${from}</span></th> <th scope="row"> <span class="badge badge-primary">${to}</span> </th>  <td> ${body} </td><td><i class="fas fa-calendar-times text-primary mr-3"></i> ${new Date(timestamp * 1000).toLocaleString()} </td> </tr>`);
         });
 
         function getProject(){

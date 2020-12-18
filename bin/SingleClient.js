@@ -114,7 +114,8 @@ const SingleClient = async (io) => {
         io.emit('message_live', msg);
         manager.process('id', msg.body).then(value => {
             console.log(value);
-            client.sendMessage(msg.from, value.answer);
+            // client.sendMessage(msg.from, value.answer);
+            msg.reply(value.answer);
         });
         // if (msg.body === '!ping reply') {
         //     // Send a new message as a reply to the current one

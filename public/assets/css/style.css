@@ -69,3 +69,9 @@
 #card-info-device{
     display: none;
 }
+
+
+.badge-primary {
+    color: #ffffff !important;
+    background-color: #5D21D2 !important;
+}
