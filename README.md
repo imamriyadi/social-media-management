@@ -1,5 +1,10 @@
 # Social Media Management 
- 
+### Home
+![](/screenshoot/project_home.PNG)
+### Flow
+![Screenshoot 1](/screenshoot/project_flow.PNG)
+### Module
+![Screenshoot 1](/screenshoot/project_module.PNG)
 
 
 ### Rencana Fitur
